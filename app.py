@@ -8,6 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import FileStorage
 
+from flask_marshmallow import Marshmallow
 
 app = Flask(__name__, static_url_path='',
             static_folder='static')
@@ -21,17 +22,15 @@ def dashboard():
  
 	
 @app.route("/register/<email>", methods= ["PUT"])
-def register(email, first, last, password):
+def register(email):
 	try:
-		user = User(email)
-		user.first_name = first
-		user.last_name = last
-		user.password = password
+		user = User(email,"enes","tezcan", "password") 
 		user.save()
+		
 	except NotUniqueError as e:
 		return jsonify(-1)
 	
-	return jsonify(user.id)
+	return jsonify(str(user.id))
 
 if __name__ == "__main__":
 	app.run()

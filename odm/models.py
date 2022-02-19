@@ -1,22 +1,31 @@
+from enum import unique
 from mongoengine import Document, StringField, EmailField, IntField, BooleanField, DateField, ReferenceField
 from datetime import date
 
-class User(Document):
-    id = IntField(Required = True, unique = True)
+class User(Document): 
+    meta = {"collection" : "users"}
     email = EmailField(required=True, unique=True)
     first_name = StringField(max_length=32)
     last_name = StringField(max_length=32)
     password = StringField(max_length=32)
 
-class Project(Document):
-    id = IntField(Required = True, unique = True)
+    def __init__(self, email, name, lastname, password):
+        super().__init__()
+        self.email = email
+        self.first_name = name
+        self.last_name = lastname
+        self.password = password
+
+class Project(Document): 
+    meta = {"collection" : "projects"}
     name = StringField(max_length=64)
     status = BooleanField(required= True, default= True)
     created_date = DateField( default = date.today())
     # TODO: yetkili
  
-class Card_List(Document):
-    id = IntField(Required = True, unique = True)
+class Card_List(Document): 
+    meta = {"collection" : "card_list"}
+
     topic = StringField(max_length=64)
     created_date = DateField( default = date.today())
     starting_date = DateField(null= True) # baslangic ve bitis tarihi planlanmamissa null
@@ -26,8 +35,10 @@ class Card_List(Document):
 
     # TODO: atanmis kisiler
   
-class Card_Comment(Document):
-    id = IntField(Required = True, unique = True)
+class Card_Comment(Document): 
+    
+    meta = {"collection" : "card_comment"}
+
     text = StringField(max_length=512)
     created_date = DateField( default = date.today(), null= True)
     ref_project = ReferenceField(Card_List , dbref = True, reverse_delete_rule= 2)  
