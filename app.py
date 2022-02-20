@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 from mongoengine.errors import NotUniqueError
-from odm.models import *
+from odm.schemas import *
 from db_connect import *
 
 from werkzeug.security import generate_password_hash, check_password_hash 
@@ -14,7 +14,7 @@ app = Flask(__name__, static_url_path='',
             static_folder='static')
  
 app.config['PROPAGATE_EXCEPTIONS'] = True
-
+ 
 @app.route("/")
 @app.route("/index")
 def dashboard():
