@@ -1,19 +1,18 @@
-import models
-from marshmallow import Schema
-import marshmallow_mongoengine as ma
+from odm.models import *
+from marshmallow_mongoengine import ModelSchema
 
-class User_Schema(Schema):
+class User_Schema(ModelSchema):
     class Meta:
-        model = models.User
+        model = User
 
-class Project_Schema(Schema):
+class Project_Schema(ModelSchema):
     class Meta:
-        model = models.Project
+        model = Project
 
-class Card_List_Schema(Schema): 
+class Card_List_Schema(ModelSchema): 
     class Meta:
-        model = models.Card_List
+        model = Card_List
       
-class Card_Comment_Schema(Schema): 
+class Card_Comment_Schema(ModelSchema): 
     class Meta:
-        model = models.Card_Comment
+        model = Card_Comment
