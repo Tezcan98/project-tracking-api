@@ -4,9 +4,6 @@ from mongoengine.errors import NotUniqueError
 from odm.schemas import User, User_Schema
 from werkzeug.security import generate_password_hash, check_password_hash
 
-# from flask_httpauth import HTTPBasicAuth
-# auth = HTTPBasicAuth() 
-
 user_proc = Blueprint('user_process', __name__)
 			
 @user_proc.route("/api/register", methods= ["POST"])
@@ -40,7 +37,6 @@ def verify():
 	if verify_password(input_email, password):
 		return jsonify({'response': 200 , 'message':session['user']})	
 	return jsonify({'response': 404 , 'message': "Email or Password is wrong. "})
-
 
 @user_proc.route("/api/logout", methods = ["POST"]) 
 def logout(): 
