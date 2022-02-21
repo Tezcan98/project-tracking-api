@@ -23,6 +23,23 @@ def add_auth_project(project_name, add_email):
     project.add_auth_user(user)
     project.update()
 
+@project_proc.route("/api/add-auth-project/<project-name>/<email>", methods= ["PUT"])
+def delete_auth_project(project_name, add_email):
+    project = Project.objects(name = project_name)
+    user = User.objects(email = add_email)
+    project.delete_auth_user(user)
+    project.update()
+
+@project_proc.route("/api/list-all-projects/", methods= ["GET"])
+def list_all_projects():
+    return Project.objects()
+
+@project_proc.route("/api/list-project/<name>", methods= ["GET"])
+def list_projects(s_name):
+    project = Project.objects(name = s_name)
+    project_json = Project_Schema.dump(project)
+    return project_json
+
 @project_proc.route("/api/delete-project/<delete_with_email>", methods= ["DELETE"])
 def delete_project(delete_with_email):
     return Project.objects(email= delete_with_email).delete()

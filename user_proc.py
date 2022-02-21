@@ -19,9 +19,8 @@ def register():
 	try:
 		hashed_password = generate_password_hash(password)
 		user = User( email,name, hashed_password)
-		user.save()  
-		json_user = User_Schema()
-		return json_user.dump(user)
+		user.save() 
+		return User_Schema.dump(user)
 	except NotUniqueError as e:
 		return jsonify(400)
 
