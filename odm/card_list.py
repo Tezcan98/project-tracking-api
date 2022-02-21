@@ -1,7 +1,6 @@
-import imp
 from mongoengine import Document, StringField,  IntField,  DateField, ReferenceField
 from datetime import date
-from project import Project
+from odm.project import Project
 
 class Card_List(Document): 
     meta = {"collection" : "card_list"}

@@ -12,10 +12,12 @@ class User(Document):
     def __init__(self, email, name, password, **values):
     # def __init__(self, *args, **values):
         super().__init__()
+        if '_id' in values:
+            self._id = str(values['_id'])
         self.email = email
         self.name = name
         self.password = password  
     
     def get_json(self):
-        self_dict = '{"email" :"'+ self.email +'", "name": "'+self.name +'", "password": "'+ self.password + '"}'
+        self_dict = '{"_id" :"' + self._id +'", "email" :"'+ self.email +'", "name": "'+self.name +'", "password": "'+ self.password + '"}'
         return json.loads(self_dict)

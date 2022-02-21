@@ -1,6 +1,6 @@
 from mongoengine import Document, StringField,  IntField,  DateField, ReferenceField
 from datetime import date
-from card_list import Card_List
+from odm.card_list import Card_List
   
 class Card_Comment(Document): 
     

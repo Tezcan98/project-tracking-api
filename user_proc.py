@@ -18,18 +18,17 @@ def register():
 		return jsonify(400)
 	try:
 		hashed_password = generate_password_hash(password)
-		user = User( email,name, hashed_password)
-		user.save() 
-		return User_Schema.dump(user)
+		user = User(email,name, hashed_password)
+		user.save()
+		return jsonify({response: 201, message: User_Schema().dump(user) } ) 
 	except NotUniqueError as e:
 		return jsonify(400)
 
 def verify_password(username, password):
-	loaded_user = User.objects(email = username)
-	user = loaded_user().first()
-	if loaded_user.count() == 1:
+	user = User.objects(email = username).first()
+	if len(user) > 0:
 		if check_password_hash(user.password, password): 
-			session['user'] = user.get_json()
+			session['user'] = User_Schema().dump(user)
 			return True
 	else:
 		return False
