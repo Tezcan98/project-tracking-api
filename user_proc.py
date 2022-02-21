@@ -20,7 +20,7 @@ def register():
 		hashed_password = generate_password_hash(password)
 		user = User(email,name, hashed_password)
 		user.save()
-		return jsonify({response: 201, message: User_Schema().dump(user) } ) 
+		return jsonify({ 'response': 201, 'message': User_Schema().dump(user) } ) 
 	except NotUniqueError as e:
 		return jsonify(400)
 
@@ -38,8 +38,9 @@ def verify():
 	input_email = request.json.get('email')
 	password = request.json.get('password')
 	if verify_password(input_email, password):
-		return jsonify(session['user'])	
-	return jsonify(404)
+		return jsonify({'response': 200 , 'message':session['user']})	
+	return jsonify({'response': 404 , 'message': "Email or Password is wrong. "})
+
 
 @user_proc.route("/api/logout", methods = ["POST"]) 
 def logout(): 

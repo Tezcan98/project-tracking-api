@@ -5,7 +5,7 @@ from odm.user import User
 from random import randint
 class Project(Document): 
     meta = {"collection" : "projects"}
-    _id = ObjectIdField()
+    _id = ObjectIdField(primary_key=True)
     name = StringField(max_length = 64, unique = True)
     status = BooleanField(required = True, default = True)
     created_date = DateField( required = True, default = date.today())
