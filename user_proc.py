@@ -40,5 +40,5 @@ def verify():
 
 @user_proc.route("/api/logout", methods = ["POST"]) 
 def logout(): 
-	session['user'] = "401"
+	session.pop('user')
 	return jsonify(200)

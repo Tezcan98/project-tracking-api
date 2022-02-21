@@ -6,6 +6,7 @@ from odm.schemas import *
 from db_proc import *
 from user_proc import user_proc, Session
 from project_proc import project_proc
+from card_list_procs import card_list_procs
 
 
 app = Flask(__name__, static_url_path='', static_folder='static')
@@ -13,6 +14,7 @@ app.config['PROPAGATE_EXCEPTIONS'] = True
 
 app.register_blueprint(user_proc )
 app.register_blueprint(project_proc )
+app.register_blueprint(card_list_procs)
 
 # app.config["SESSION_PERMANENT"] = False
 app.config["PERMANENT_SESSION_LIFETIME "] = timedelta(minutes= 30)

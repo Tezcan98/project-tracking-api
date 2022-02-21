@@ -1,5 +1,3 @@
-import logging
-from unicodedata import name
 from flask import Blueprint, request, jsonify, session
 from odm.schemas import *
 from app import Session
@@ -8,7 +6,7 @@ project_proc = Blueprint('project_proc', __name__)
 
 @project_proc.route("/api/create-project", methods= ["POST"])
 def create_project():
-    if session['user'] == "401":
+    if not session.get('user'):
         return jsonify({'response' : 401, 'message':"Please Login."})
     project_name = request.json.get('name')
     new_project = Project(project_name)
@@ -19,7 +17,7 @@ def create_project():
 @project_proc.route("/api/change-project-activity/<project_id>/<activity>", methods= ["PUT"])
 def change_project_activity(project_id, activity):
     project = Project.objects(_id = project_id)
-    if session['user'] == "401":
+    if not session.get('user'):
         return jsonify({'response' : 401, 'message':"Please Login."})
     if session['user']['_id'] in project.auth_users:
         project.update(status = eval(activity)) 
@@ -30,7 +28,7 @@ def change_project_activity(project_id, activity):
 @project_proc.route("/api/get-project-activity/<project_id>", methods= ["GET"])
 def get_project_activity(project_id):
     project = Project.objects(_id = project_id).first()
-    if session['user'] == "401":
+    if not session.get('user'):
         return jsonify({'response' : 401, 'message':"Please Login."})
     if session['user']['_id'] in project.auth_users:
         return jsonify(project.get_status())
@@ -39,7 +37,7 @@ def get_project_activity(project_id):
 
 @project_proc.route("/api/add-auth-project/<project_id>/<user_id>", methods= ["PUT"])
 def add_auth_project(project_id, user_id):
-    if session['user'] == "401":
+    if not session.get('user'):
         return jsonify({'response' : 401, 'message':"Please Login."})
     project = Project.objects(_id = project_id)
     last_project = project.first()
@@ -53,7 +51,7 @@ def add_auth_project(project_id, user_id):
 
 @project_proc.route("/api/delete-auth-project/<project_id>/<user_id>", methods= ["DELETE"])
 def delete_auth_project(project_id, user_id):
-    if session['user'] == "401":
+    if not session.get('user'):
         return jsonify({'response' : 401, 'message':"Please Login."})
         
     project = Project.objects(_id = project_id)
@@ -71,7 +69,7 @@ def delete_auth_project(project_id, user_id):
 
 @project_proc.route("/api/list-all-projects/", methods= ["GET"])
 def list_all_projects():
-    if session['user'] == "401":
+    if not session.get('user'):
         return jsonify({'response' : 401, 'message' :"Please Login."})
     account_id = session['user']['_id']
     projects = Project.objects()
@@ -87,7 +85,7 @@ def list_all_projects():
 
 @project_proc.route("/api/list-project/<project_id>", methods= ["GET"])
 def list_project(project_id):
-    if session['user'] == "401":
+    if not session.get('user'):
         return jsonify({'response' : 401, 'message':"Please Login."})
     logged_id  = session['user']['_id']
     project = Project.objects(_id = project_id).first()
@@ -101,7 +99,7 @@ def list_project(project_id):
 
 @project_proc.route("/api/delete-project/<project_id>", methods= ["DELETE"])
 def delete_project(project_id):
-    if session['user'] == "401":
+    if not session.get('user'):
         return jsonify({'response' : 401, 'message':"Please Login."})
     logged_id = session['user']['_id']
     project=  Project.objects(_id = project_id).first()
@@ -112,7 +110,7 @@ def delete_project(project_id):
 
 @project_proc.route("/api/update-project-name/<project_id>/<new_name>", methods= ["PUT"])
 def update_project(project_id, new_name):
-    if session['user'] == "401":
+    if not session.get('user'):
         return jsonify({'response' : 401, 'message':"Please Login."})
     logged_id  = session['user']['_id']
     project = Project.objects(_id = project_id).first()
