@@ -1,8 +1,11 @@
 import email
+from email.policy import default
 from enum import unique
-from mongoengine import Document, StringField, EmailField, IntField, BooleanField, DateField, ReferenceField, ObjectIdField
+from pickle import TRUE
+from mongoengine import Document, StringField, EmailField, IntField, BooleanField, DateField, ReferenceField, ObjectIdField, ListField
 from datetime import date
 import json
+
 class User(Document): 
     meta = {"collection" : "users"}
     _id = ObjectIdField()
@@ -23,10 +26,21 @@ class User(Document):
 
 class Project(Document): 
     meta = {"collection" : "projects"}
-    name = StringField(max_length=64)
-    status = BooleanField(required= True, default= True)
-    created_date = DateField( default = date.today())
+    name = StringField(max_length = 64, unique = True)
+    status = BooleanField(required = True, default = True)
+    created_date = DateField( required = True, default = date.today())
+    user_field = ListField(User, default = [])
     # TODO: yetkili
+
+    def __init__(self, name, **values):
+        super().__init__()
+        self.name = name
+
+    def add_auth_user(self, user):
+        self.user_field.append(user)
+
+    def set_activity(self, activity):
+        self.status = activity
  
 class Card_List(Document): 
     meta = {"collection" : "card_list"}
