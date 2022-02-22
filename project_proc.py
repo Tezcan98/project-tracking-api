@@ -73,15 +73,15 @@ def list_all_projects():
         return jsonify({'response' : 401, 'message' :"Please Login."})
     account_id = session['user']['_id']
     projects = Project.objects()
+    if project is None:
+        return jsonify({'response': 406 , 'message': "There is no project for this account. "})
     project_list = []
     for project in projects:
         if account_id in project.auth_users:
             project_json = Project_Schema().dump(project)
             project_list.append(project_json)
-    if len(project_list) > 0:
-        return jsonify(project_list)
-    else:
-        return jsonify({'response': 406 , 'message': "There is project for this account. "})
+    return jsonify(project_list)
+        
 
 @project_proc.route("/api/list-project/<project_id>", methods= ["GET"])
 def list_project(project_id):

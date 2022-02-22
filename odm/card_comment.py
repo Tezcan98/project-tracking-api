@@ -1,6 +1,6 @@
 from mongoengine import Document, StringField,  IntField,  DateField, ReferenceField
 from datetime import date
-from odm.card_list import Card_List
+from odm.card import Card
   
 class Card_Comment(Document): 
     
@@ -8,5 +8,5 @@ class Card_Comment(Document):
 
     text = StringField(max_length=512)
     created_date = DateField( default = date.today(), null= True)
-    ref_project = ReferenceField(Card_List , dbref = True, reverse_delete_rule= 2)  
+    ref_project = ReferenceField(Card , dbref = True, reverse_delete_rule= 2)  
     # TODO: gonderen idsi

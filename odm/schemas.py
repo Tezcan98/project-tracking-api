@@ -1,4 +1,4 @@
-from odm.card_list import Card_List
+from odm.card import Card
 from odm.card_comment import Card_Comment
 from odm.project import Project
 from odm.user import User
@@ -12,9 +12,9 @@ class Project_Schema(ModelSchema):
     class Meta:
         model = Project
 
-class Card_List_Schema(ModelSchema): 
+class Card_Schema(ModelSchema): 
     class Meta:
-        model = Card_List
+        model = Card
       
 class Card_Comment_Schema(ModelSchema): 
     class Meta:

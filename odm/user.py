@@ -1,10 +1,11 @@
 from mongoengine import Document, StringField, EmailField, IntField, BooleanField, DateField, ReferenceField, ObjectIdField, ListField
 from datetime import date
 import json
+from bson import ObjectId
 
 class User(Document): 
     meta = {"collection" : "users"}
-    _id = ObjectIdField()
+    _id = ObjectIdField(primary_key=True, default = ObjectId )
     email = EmailField(required=True, unique=True)
     name = StringField(max_length=32) 
     password = StringField(max_length=128)
