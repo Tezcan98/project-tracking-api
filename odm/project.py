@@ -1,7 +1,7 @@
 from email.policy import default
 from tkinter.messagebox import NO
 from mongoengine import Document, StringField, EmailField, IntField, BooleanField, DateField, ReferenceField, ObjectIdField, ListField
-from datetime import date
+from datetime import datetime
 from odm.user import User
 from bson import ObjectId
 class Project(Document): 
@@ -9,7 +9,7 @@ class Project(Document):
     _id = ObjectIdField(primary_key=True, default = ObjectId )
     name = StringField(max_length = 64)
     status = BooleanField(required = True, default = True)
-    created_date = DateField( required = True, default = date.today())
+    created_date = DateField( required = True, default = datetime.utcnow())
     auth_users = ListField( field = StringField(), default = [])
 
     def __init__(self, name, **values):
