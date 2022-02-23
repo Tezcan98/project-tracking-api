@@ -13,11 +13,11 @@ def create_project():
     creator_user = User_Schema().load(logged_user)
     content = request.json.get('content')
     card_id = request.json.get('card_id')
-    card = Card.objects(_id = card_id).only()
+    card = Card.objects(_id = card_id).first()
     if card.check_project_auth(logged_user['_id']):
         comment = Comment(content)
         comment.set_creator(creator_user)
-        comment.set_ref(card.first())
+        comment.set_ref(card)
         comment.save()
         return jsonify({'response': 201, 'message': "Created successfully"} )
     else:
@@ -36,3 +36,20 @@ def delete_comment(comment_id):
         else:
             return jsonify({'response' : 403, 'message': "Authentication Error."})
     return jsonify({'response': 404 , 'message': "Comment not found."})
+
+@comment_proc.route("/api/update-comment/<comment_id>", methods= ["PUT"])
+def update_comment(comment_id):
+    if not session.get('user'):
+        return jsonify({'response' : 401, 'message':"Please Login."})
+    logged_id  = session['user']['_id']
+    new_content = request.json.get('content')
+    comments = Comment.objects( _id = comment_id)
+    selected_comments = comments.first()
+    if selected_comments is not None:
+        if selected_comments.check_project_auth(logged_id):
+            comments.update(content = new_content)
+            return jsonify({'response': 200, 'message': "Updated successfully"} )
+        else:
+            return jsonify({'response' : 403, 'message': "Authentication Error, you do not have a permission"})
+    else:
+        return jsonify({'response': 404 , 'message': "There is no comment to update."})
