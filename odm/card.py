@@ -5,7 +5,6 @@ from datetime import datetime
 from odm.project import Project
 from odm.user import User
 from bson import ObjectId
-import json
 
 class Card(Document): 
     meta = {"collection" : "cards"}
@@ -25,7 +24,6 @@ class Card(Document):
             self._id = str(values['_id'])
         if 'ref_project' in values:
             self.ref_project = values['ref_project']
-
         self.topic = topic
         self.assignment = None
         self.starting_date = None
@@ -33,6 +31,6 @@ class Card(Document):
 
     def add_ref(self, project):
         self.ref_project = project
-    
+
     def check_project_auth(self, user_id):
         return user_id in self.ref_project.auth_users

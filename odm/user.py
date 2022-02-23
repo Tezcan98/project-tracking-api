@@ -11,7 +11,6 @@ class User(Document):
     password = StringField(max_length=128)
 
     def __init__(self, email, name, password, **values):
-    # def __init__(self, *args, **values):
         super().__init__()
         if '_id' in values:
             self._id = str(values['_id'])

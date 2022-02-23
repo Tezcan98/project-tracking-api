@@ -27,23 +27,26 @@ def fill_card(card_id):
         return jsonify({'response' : 401, 'message':"Please Login."})
     logged_id  = session['user']['_id']
     typed_content = request.json.get('content')
-    card = Card.objects( _id = card_id)
-    if card.only('topic','ref_project').get().check_project_auth(logged_id):
-        this_card = card.first()
-        card.update(content = typed_content)
-        return jsonify({'response': 200, 'message': "Updated successfully"} )
+    cards = Card.objects( _id = card_id).first()
+    selected_card = cards.first()
+    if selected_card is not None:
+        if selected_card.check_project_auth(logged_id):
+            cards.update(content = typed_content)
+            return jsonify({'response': 200, 'message': "Updated successfully"} )
+        else:
+            return jsonify({'response' : 403, 'message': "Authentication Error, you do not have a permission"})
     else:
-        return jsonify({'response' : 403, 'message': "Authentication Error, you do not have a permission"})
+        return jsonify({'response': 404 , 'message': "There is no card to fill."})
 
 @card_procs.route("/api/assign-card/<card_id>/<user_id>", methods= ["PUT"])
 def assign_card(card_id, user_id):
     if not session.get('user'):
         return jsonify({'response' : 401, 'message':"Please Login."})
-    logged_id  = session['user']['_id']
+    logged_user  = session['user']['_id']
     
     card = Card.objects( _id = card_id)
-    if card.only('topic','ref_project').get().check_project_auth(logged_id):
-        user = User.objects(_id = user_id).first()
+    if card.only('topic','ref_project').get().check_project_auth(logged_user):
+        user = User_Schema().load(session['user'])
         card.update( assignment = user)
         return jsonify({'response': 200, 'message': "Assignment successful" })
     else:

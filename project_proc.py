@@ -39,10 +39,12 @@ def get_project_activity(project_id):
 def add_auth_project(project_id, user_id):
     if not session.get('user'):
         return jsonify({'response' : 401, 'message':"Please Login."})
+    logged_id  = session['user']['_id']
+
     project = Project.objects(_id = project_id)
     last_project = project.first()
     auth_list = last_project.auth_users 
-    if session['user']['_id'] in auth_list:
+    if logged_id in auth_list:
         auth_list.append(user_id)
         project.update(auth_users = auth_list)
         return jsonify({'response': 200, 'message': "successfull"})
@@ -53,11 +55,12 @@ def add_auth_project(project_id, user_id):
 def delete_auth_project(project_id, user_id):
     if not session.get('user'):
         return jsonify({'response' : 401, 'message':"Please Login."})
+    logged_id  = session['user']['_id']
         
     project = Project.objects(_id = project_id)
     last_project = project.first()
     auth_list = last_project.auth_users 
-    if session['user']['_id'] in auth_list:
+    if logged_id in auth_list:
         if user_id in auth_list:
             auth_list.remove(user_id)
             project.update(auth_users = auth_list)
@@ -71,13 +74,13 @@ def delete_auth_project(project_id, user_id):
 def list_all_projects():
     if not session.get('user'):
         return jsonify({'response' : 401, 'message' :"Please Login."})
-    account_id = session['user']['_id']
+    logged_id = session['user']['_id']
     projects = Project.objects()
     if project is None:
         return jsonify({'response': 406 , 'message': "There is no project for this account. "})
     project_list = []
     for project in projects:
-        if account_id in project.auth_users:
+        if logged_id in project.auth_users:
             project_json = Project_Schema().dump(project)
             project_list.append(project_json)
     return jsonify(project_list)
@@ -104,10 +107,11 @@ def delete_project(project_id):
     logged_id = session['user']['_id']
     project=  Project.objects(_id = project_id).first()
     if project is not None:
-        if logged_id in project.auth_users:
+        if project.check_auth(logged_id):
             project.delete()
             return jsonify({'response': 200, 'message' : "succesfully deleted"})
-
+        else:
+            return jsonify({'response' : 403, 'message': "Authentication Error."})
 @project_proc.route("/api/update-project-name/<project_id>/<new_name>", methods= ["PUT"])
 def update_project(project_id, new_name):
     if not session.get('user'):

@@ -23,5 +23,8 @@ class Project(Document):
     def add_auth_user(self, user_mail):
         self.auth_users.append(user_mail)
     
+    def check_auth(self, user_id):
+        return user_id in self.auth_users
+
     def get_status(self):
         return self.status
