@@ -43,11 +43,11 @@ def assign_card(card_id, user_id):
     if not session.get('user'):
         return jsonify({'response' : 401, 'message':"Please Login."})
     logged_user  = session['user']['_id']
-    
-    card = Card.objects( _id = card_id)
-    if card.only('topic','ref_project').get().check_project_auth(logged_user):
+    cards = Card.objects( _id = card_id)
+    selected_cards = cards.first()
+    if selected_cards.check_project_auth(logged_user):
         user = User_Schema().load(session['user'])
-        card.update( assignment = user)
+        cards.update( assignment = user)
         return jsonify({'response': 200, 'message': "Assignment successful" })
     else:
         return jsonify({'response' : 403, 'message': "Authentication Error, you do not have a permission"})
@@ -58,8 +58,9 @@ def set_time_card(card_id):
         return jsonify({'response' : 401, 'message':"Please Login."})
     logged_id  = session['user']['_id']
 
-    card = Card.objects( _id = card_id)
-    if card.only('topic','ref_project').get().check_project_auth(logged_id):
+    cards = Card.objects( _id = card_id)
+    selected_card = cards.first()
+    if selected_card.check_project_auth(logged_id):
         try:
             start_time = request.json.get('start')
             start_time_format = datetime.strptime(start_time, '%d-%m-%Y %H:%M')  #TODO : hours not seen
@@ -67,7 +68,7 @@ def set_time_card(card_id):
             end_time_format = datetime.strptime(end_time, '%d-%m-%Y %H:%M')
         except:
             return jsonify({'response': 417, 'message': "Error, Date format must as %d-%m-%Y %H:%M" })
-        card.update(starting_date = start_time_format, complated_date = end_time_format, status = 1 )
+        cards.update(starting_date = start_time_format, complated_date = end_time_format, status = 1 )
 
         return jsonify({'response': 200, 'message': start_time_format })
     else:
@@ -78,9 +79,10 @@ def set_status(card_id, new_status):
     if not session.get('user'):
         return jsonify({'response' : 401, 'message':"Please Login."})
     logged_id  = session['user']['_id']
-    card = Card.objects( _id = card_id)
-    if card.only('topic','ref_project').get().check_project_auth(logged_id):
-        card.update(status= new_status)
+    cards = Card.objects( _id = card_id)
+    selected_card = cards.first()
+    if selected_card.check_project_auth(logged_id):
+        cards.update(status= new_status)
         return jsonify({'response': 200, 'message': "Status updated" })
     else:
         return jsonify({'response' : 403, 'message': "Authentication Error, you do not have a permission"})
@@ -94,7 +96,7 @@ def get_cards_with_status(status):
     card_list = []
     for card in cards:
         card_json = Card_Schema().dump(card)
-        if cards.only('topic','ref_project').get(_id = card._id ).check_project_auth(logged_id):
+        if card.check_project_auth(logged_id):
             card_list.append(card_json)
     if cards == []:
         return jsonify({'response': 404 , 'message': "There is no card to list."})
@@ -110,7 +112,7 @@ def list_all_cards():
     if cards is None:
         return jsonify({'response': 404 , 'message': "Card not found."})
     for card in cards:
-        if cards.only('topic','ref_project').get(_id = card._id).check_project_auth(logged_id):
+        if card.check_project_auth(logged_id):
             card_json = Card_Schema().dump(card)
             card_list.append(card_json)
     return jsonify({'response': 200, 'message' : card_list })

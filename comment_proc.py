@@ -13,8 +13,8 @@ def create_project():
     creator_user = User_Schema().load(logged_user)
     content = request.json.get('content')
     card_id = request.json.get('card_id')
-    card = Card.objects(_id = card_id)
-    if card.only('topic','ref_project').get().check_project_auth(logged_user['_id']):
+    card = Card.objects(_id = card_id).only()
+    if card.check_project_auth(logged_user['_id']):
         comment = Comment(content)
         comment.set_creator(creator_user)
         comment.set_ref(card.first())
