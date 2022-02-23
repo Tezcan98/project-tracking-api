@@ -2,6 +2,7 @@ from mongoengine import Document, StringField, EmailField, IntField, BooleanFiel
 from datetime import date
 import json
 from bson import ObjectId
+from werkzeug.security import generate_password_hash, check_password_hash
 
 class User(Document): 
     meta = {"collection" : "users"}
@@ -18,6 +19,15 @@ class User(Document):
         self.name = name
         self.password = password  
     
-    def get_json(self):
-        self_dict = '{"_id" :"' + self._id +'", "email" :"'+ self.email +'", "name": "'+self.name +'", "password": "'+ self.password + '"}'
-        return json.loads(self_dict)
+    def set_hashed_password(self):
+        self.password = generate_password_hash(self.password)
+
+    def verify_password(self, password):
+        return check_password_hash(self.password, password)
+
+    def get_password(self):
+        return 
+
+    # def get_json(self):
+    #     self_dict = '{"_id" :"' + self._id +'", "email" :"'+ self.email +'", "name": "'+self.name +'", "password": "'+ self.password + '"}'
+    #     return json.loads(self_dict)

@@ -12,19 +12,19 @@ def register():
 	password = request.json.get('password')
 	name = request.json.get('name')
 	if email is None or password is None or name is None:
-		return jsonify(400)
+		return jsonify({ 'response' : 409, 'message' : "some values are missing."})
 	try:
-		hashed_password = generate_password_hash(password)
-		user = User(email,name, hashed_password)
+		user = User(email,name, password)
+		user.set_hashed_password()
 		user.save()
 		return jsonify({ 'response': 201, 'message': User_Schema().dump(user) } ) 
 	except NotUniqueError as e:
-		return jsonify(400)
+		return jsonify({ 'response' : 409, 'message' : "This e-mail is already registered"})
 
 def verify_password(username, password):
 	user = User.objects(email = username).first()
 	if len(user) > 0:
-		if check_password_hash(user.password, password): 
+		if user.verify_password(password):
 			session['user'] = User_Schema().dump(user)
 			return True
 	else:
