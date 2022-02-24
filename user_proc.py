@@ -9,8 +9,8 @@ user_proc = Blueprint('user_process', __name__)
 @user_proc.route("/api/register", methods= ["POST"])
 def register():
 	email = request.json.get('email')
-	password = request.json.get('password')
 	name = request.json.get('name')
+	password = request.json.get('password')
 	if email is None or password is None or name is None:
 		return jsonify({ 'response' : 409, 'message' : "some values are missing."})
 	try:
@@ -39,6 +39,6 @@ def verify():
 	return jsonify({'response': 404 , 'message': "Email or Password is wrong. "})
 
 @user_proc.route("/api/logout", methods = ["POST"]) 
-def logout(): 
+def logout(): #TODO: if session exist
 	session.pop('user')
 	return jsonify(200)

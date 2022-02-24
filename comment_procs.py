@@ -53,3 +53,7 @@ def update_comment(comment_id):
             return jsonify({'response' : 403, 'message': "Authentication Error, you do not have a permission"})
     else:
         return jsonify({'response': 404 , 'message': "There is no comment to update."})
+
+
+
+#TODO: GET COMMENTS

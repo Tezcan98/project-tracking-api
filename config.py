@@ -16,8 +16,8 @@ app.register_blueprint(mail_service)
 
 app.config['PROPAGATE_EXCEPTIONS'] = True
 # app.config["SESSION_PERMANENT"] = False
-app.config["PERMANENT_SESSION_LIFETIME "] = timedelta(minutes= 30)
-app.config["SESSION_TYPE"] = "filesystem"
+#app.config["PERMANENT_SESSION_LIFETIME "] = timedelta(minutes= 30)
+#app.config["SESSION_TYPE"] = "filesystem"
 app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
