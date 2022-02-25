@@ -13,7 +13,7 @@ class Comment(Document):
     ref_card = ReferenceField(Card ,default = None , reverse_delete_rule= 2)  
     creator_user = ReferenceField(User , default = None ,reverse_delete_rule= 2) #rule : cascade 
 
-    def __init__(self, content, **values):
+    def __init__(self, content = content, **values):
         super().__init__()
         if '_id' in values:
             self._id = str(values['_id'])

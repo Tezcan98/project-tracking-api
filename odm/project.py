@@ -1,4 +1,4 @@
-from mongoengine import Document, StringField, EmailField, IntField, BooleanField, DateField, ReferenceField, ObjectIdField, ListField
+from mongoengine import Document, StringField, EmailField, BooleanField, DateField, ObjectIdField, ListField
 from datetime import datetime
 from odm.user import User
 from bson import ObjectId
@@ -10,7 +10,7 @@ class Project(Document):
     created_date = DateField( required = True, default = datetime.utcnow())
     auth_users = ListField( field = StringField(), default = [])
 
-    def __init__(self, name, **values):
+    def __init__(self,  name = name , **values):
         super().__init__()
         if '_id' in values:
             self._id = str(values['_id'])

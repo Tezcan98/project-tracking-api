@@ -16,12 +16,14 @@ class Card(Document):
     ref_project = ReferenceField(Project , default = None ,reverse_delete_rule= 2) #rule : cascade 
     assignment = ReferenceField(User ,default = None , reverse_delete_rule= 1) # rule : set null if user delete
 
-    def __init__(self, topic, **values):
+    def __init__(self, topic = topic , **values):
         super().__init__()
         if '_id' in values:
             self._id = str(values['_id'])
         if 'ref_project' in values:
             self.ref_project = values['ref_project']
+        if 'content' in values:
+            self.content = values['content']
         self.topic = topic
         self.assignment = None
         self.starting_date = None

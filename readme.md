@@ -9,6 +9,3 @@ eksikleri:
 1- Docker image çıkartılamadı.  
 2- Email servis kullanılamadı.  
 3- Authentication session üzerinden kullanıldı.  
-3- Authentication session üzerinden kullanıldı.  
-3- Authentication session üzerinden kullanıldı.  
-

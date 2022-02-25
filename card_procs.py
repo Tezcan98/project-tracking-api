@@ -13,7 +13,7 @@ def create_card():
     card_topic = request.json.get('topic')
     project_id = request.json.get('project')
     project = Project.objects(_id = project_id).first()
-    if logged_id in project.auth_users:
+    if project.check_auth(logged_id):
         new_card = Card(card_topic)
         new_card.add_ref(project)
         new_card.save()
@@ -108,6 +108,8 @@ def list_all_cards(project_id):
         return jsonify({'response' : 401, 'message':"Please Login."})
     logged_id  = session['user']['_id']
     project = Project.objects(_id = project_id).first()
+    if project == None:
+        return jsonify({'response': 406 , 'message': "Project not found."})
     cards = Card.objects(ref_project = project)
     card_list = []
     if cards is None:

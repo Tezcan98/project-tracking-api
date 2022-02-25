@@ -76,11 +76,11 @@ def list_all_projects():
         return jsonify({'response' : 401, 'message' :"Please Login."})
     logged_id = session['user']['_id']
     projects = Project.objects()
-    if project is None:
+    if projects == '[]':
         return jsonify({'response': 406 , 'message': "There is no project for this account. "})
     project_list = []
     for project in projects:
-        if logged_id in project.auth_users:
+        if project.check_auth(logged_id):
             project_json = Project_Schema().dump(project)
             project_list.append(project_json)
     return jsonify(project_list)
