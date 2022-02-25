@@ -102,17 +102,20 @@ def get_cards_with_status(status):
         return jsonify({'response': 404 , 'message': "There is no card to list."})
     return jsonify(card_list)
     
-@card_procs.route("/api/list-all-cards/", methods= ["GET"])
-def list_all_cards():
+@card_procs.route("/api/list-all-cards/<project_id>", methods= ["GET"])
+def list_all_cards(project_id):
     if not session.get('user'):
         return jsonify({'response' : 401, 'message':"Please Login."})
     logged_id  = session['user']['_id']
-    cards = Card.objects()
+    project = Project.objects(_id = project_id).first()
+    cards = Card.objects(ref_project = project)
     card_list = []
     if cards is None:
         return jsonify({'response': 404 , 'message': "Card not found."})
-    for card in cards:
-        if card.check_project_auth(logged_id):
+    if project.check_auth(logged_id):
+        for card in cards:
             card_json = Card_Schema().dump(card)
             card_list.append(card_json)
-    return jsonify({'response': 200, 'message' : card_list })
+        return jsonify({'response': 200, 'message' : card_list })
+    else:
+        return jsonify({'response' : 403, 'message': "Authentication Error, you do not have a permission"})

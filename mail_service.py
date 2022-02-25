@@ -1,6 +1,6 @@
 from flask import Flask, Blueprint
-from celery import Celery
-from flask_mail import Mail
+# from celery import Celery
+# from flask_mail import Mail
 
 mail_service = Blueprint('mail_service', __name__)
 

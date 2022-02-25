@@ -1,5 +1,3 @@
-from email.policy import default
-from tkinter.messagebox import NO
 from mongoengine import Document, StringField, EmailField, IntField, BooleanField, DateField, ReferenceField, ObjectIdField, ListField
 from datetime import datetime
 from odm.user import User

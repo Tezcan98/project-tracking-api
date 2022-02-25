@@ -53,3 +53,24 @@ def update_comment(comment_id):
             return jsonify({'response' : 403, 'message': "Authentication Error, you do not have a permission"})
     else:
         return jsonify({'response': 404 , 'message': "There is no comment to update."})
+
+
+@comment_proc.route("/api/list-comments/<card_id>", methods= ["GET"])
+def get_comment(card_id):
+    if not session.get('user'):
+        return jsonify({'response' : 401, 'message':"Please Login."})
+    logged_id  = session['user']['_id']
+    card = Card.objects( _id = card_id).first()
+    comments = Comment.objects(ref_card = card)
+    comments_list = []
+    if comments is not None:
+        if card.check_project_auth(logged_id):
+            for comment in comments:
+                comment_json = Comment_Schema().dump(comment)
+                comments_list.append(comment_json)
+            return jsonify({'response': 200, 'message' : comments_list })
+        else:
+            return jsonify({'response' : 403, 'message': "Authentication Error, you do not have a permission"})
+    else:   
+        return jsonify({'response': 404 , 'message': "There is no comment to list."})
+
