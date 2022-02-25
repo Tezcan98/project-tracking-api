@@ -2,7 +2,6 @@ from flask import Blueprint, request, jsonify, session
 from flask_session import Session
 from mongoengine.errors import NotUniqueError
 from odm.schemas import User, User_Schema
-from werkzeug.security import generate_password_hash, check_password_hash
 
 user_proc = Blueprint('user_process', __name__)
 			
