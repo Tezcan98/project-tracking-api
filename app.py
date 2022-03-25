@@ -8,7 +8,7 @@ from config import *
 Session(app)
 
 @app.route("/")
-def dashboard():
+def index():
 	return render_template("dashboard.html")
 
 if __name__ == "__main__":
