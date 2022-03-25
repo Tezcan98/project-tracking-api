@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, jsonify, session, redirect, u
 from flask_session import Session
 from db_procs import *
 
-app = Flask(__name__, static_url_path='', static_folder='static')
+app = Flask(__name__, static_url_path='', static_folder='static', template_folder='tamplates' )
 from config import *
 
 Session(app)
