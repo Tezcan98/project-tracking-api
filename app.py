@@ -12,5 +12,5 @@ def index():
 	return render_template("dashboard.html")
 
 if __name__ == "__main__":
-	app.run(static_url_path='', static_folder='static', template_folder='templates' )
+	app.run(static_url_path='', static_folder='static', template_folder='templates', host='0.0.0.0')
 	
