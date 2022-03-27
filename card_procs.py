@@ -1,6 +1,8 @@
 from flask import Blueprint, request, jsonify, session
 from odm.schemas import *
-from app import Session
+# from app import Session
+from flask_session import Session
+
 from datetime import datetime
 card_procs = Blueprint('card_procs', __name__)
 
