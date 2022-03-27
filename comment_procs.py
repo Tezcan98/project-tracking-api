@@ -1,6 +1,8 @@
 from flask import Blueprint, request, jsonify, session
 from odm.schemas import *
-from app import Session
+# from app import Session
+from flask_session import Session
+
 
 
 comment_proc = Blueprint('comment_proc', __name__)

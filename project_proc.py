@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, session
 from odm.schemas import *
-from app import Session
+# from app import Session
+from flask_session import Session ## will be chanced
 
 project_proc = Blueprint('project_proc', __name__)
 

@@ -2,15 +2,17 @@ from flask import Flask, render_template, request, jsonify, session, redirect, u
 from flask_session import Session
 from db_procs import *
 
-from config import *
+app = Flask(__name__,  static_url_path='', static_folder='static', template_folder='templates')
 
+from config import configs
+
+configs(app)
+Session(app)
 
 @app.route("/")
 def index():
 	return render_template("dashboard.html")
 
 if __name__ == "__main__":
-	app = Flask(__name__)
-	Session(app)
-	app.run(static_url_path='', static_folder='static', template_folder='templates', host='0.0.0.0')
+	app.run(debug=True, host='0.0.0.0')
 	
