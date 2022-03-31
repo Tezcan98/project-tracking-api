@@ -11,7 +11,9 @@ Session(app)
 
 @app.route("/")
 def index():
-	return render_template("dashboard.html")
+	port = request.environ.get('REMOTE_PORT')
+	return "Hello docker on port : " + str(port)
+	# return render_template("dashboard.html")
 
 if __name__ == "__main__":
 	app.run(debug=True, host='0.0.0.0')
