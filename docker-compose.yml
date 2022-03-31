@@ -5,7 +5,6 @@ services:
     build: ./config/
     ports: 
     - 80:80
-
   flaskapp:
     build: ./
     environment:
@@ -17,12 +16,10 @@ services:
     - 5000:5000
   mongodb:
     image: mongo:latest
-    container_name: mongodb
-    restart: unless-stopped
-    command: mongod --auth
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: 123
       MONGO_INITDB_DATABASE: Project
-      MONGODB_DATA_DIR: /data/db
-      MONDODB_LOG_DIR: /dev/null
+    restart: always
+    ports:
+      - 27017:27017
